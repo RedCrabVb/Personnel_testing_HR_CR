@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
 
-namespace WebApplication1.Services
+namespace Personnel_testing_HR_CR.Services
 {
     public class EmailSender : IEmailSender  
     {

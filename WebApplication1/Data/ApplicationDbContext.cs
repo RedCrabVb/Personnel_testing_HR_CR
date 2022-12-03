@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace WebApplication1.Data
+namespace Personnel_testing_HR_CR.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {

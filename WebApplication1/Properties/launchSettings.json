@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "WebApplication1": {
+    "Personnel_testing_HR_CR": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

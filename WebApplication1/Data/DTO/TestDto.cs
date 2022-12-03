@@ -1,4 +1,4 @@
-﻿namespace WebApplication1.Data.DTO
+﻿namespace Personnel_testing_HR_CR.Data.DTO
 {
 
     public class Question

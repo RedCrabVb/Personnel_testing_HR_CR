@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using WebApplication1.Data.Entity;
+using Personnel_testing_HR_CR.Data.Entity;
 
-namespace WebApplication1.Pages
+namespace Personnel_testing_HR_CR.Pages
 {
-    public class PrivacyModel : PageModel
+    public class PassingTestsModel : PageModel
     {
-        private readonly ILogger<PrivacyModel> _logger;
+        private readonly ILogger<PassingTestsModel> _logger;
         public string Name { get; set; }
         public TestEntity testEntity { get; set; }
 
-        public PrivacyModel(ILogger<PrivacyModel> logger)
+        public PassingTestsModel(ILogger<PassingTestsModel> logger)
         {
             _logger = logger;
             testEntity = new TestEntity();

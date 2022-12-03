@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace WebApplication1.Migrations
+namespace Personnel_testing_HR_CR.Migrations
 {
     /// <inheritdoc />
     public partial class upd : Migration

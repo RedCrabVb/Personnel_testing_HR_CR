@@ -1,4 +1,4 @@
-﻿namespace WebApplication1.Data.Entity
+﻿namespace Personnel_testing_HR_CR.Data.Entity
 {
     public class TestEntity
     {

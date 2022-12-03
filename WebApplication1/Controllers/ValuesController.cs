@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication1.Data.DTO;
+using Personnel_testing_HR_CR.Data.DTO;
 
-namespace WebApplication1.Controllers
+namespace Personnel_testing_HR_CR.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

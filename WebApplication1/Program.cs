@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using WebApplication1.Data;
+using Personnel_testing_HR_CR.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +26,10 @@ builder.Services.AddControllers();
 
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddMvc().AddRazorPagesOptions(options => {
+    options.Conventions.AuthorizeFolder("/Privacy");
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -41,6 +45,8 @@ if (app.Environment.IsDevelopment())
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sample API");
     });
+
+
 }
 else
 {
