@@ -44,7 +44,7 @@ namespace Personnel_testing_HR_CR.Pages
             var questions = new List<Question>();
             questions.Add(question);
             questions.Add(question2);
-            testEntity.questions = questions.ToArray();
+            testEntity.Questions = questions.ToArray();
         }
 
         public void OnGet()

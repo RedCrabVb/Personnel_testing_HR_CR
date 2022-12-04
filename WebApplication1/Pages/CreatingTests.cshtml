@@ -1,4 +1,119 @@
 ﻿@page
 @model Personnel_testing_HR_CR.Pages.CreatingTestsModel
 @{
+    int count = 1, countR = 0;
 }
+
+<div class="container-sm p-3 mb-2 gradient-main text-dark">
+    <div>
+
+        <h1>Название теста</h1>
+        <input id="testName" name="testName" class="form-control" required="required" type="text">
+        <h2>Описание теста</h2>
+        <input id="testDescription" name="testDescription" class="form-control" required="required" type="text">
+        <br>
+
+
+        <div id="test">
+            <div id="testNumber1" class="container p-1 mb-1 gradient-test text-white ">
+                <h1 id="qiText" class="text-dark">Вопрос №1</h1>
+                <h6 class="text-dark">Название вопроса</h6>
+                <input id="question" name="nameQ_1" class="form-control mb-2" required="required" type="text">
+                <h6 class="text-dark">Варианты ответа</h6>
+                <p>Верный: </p><input id="response1" name="nameR_1" class="form-control mb-2" required="required" type="text">
+                <input id="response2" class="form-control mb-2" required="required" type="text">
+                <input id="response3" class="form-control mb-2" required="required" type="text">
+                <input id="response4" class="form-control mb-2" required="required" type="text">
+                <h6 class="text-dark">Комментарий</h6>
+                <input id="comment" class="form-control mb-2" required="required" type="text">
+            </div>
+        </div>
+
+        <div class="col text-center">
+            <button id="addCaseTest" type="button" class="btn btn-outline-primary">Добавить вопрос</button>
+        </div>
+        <br>
+        <div class="col text-center">
+            <button id="endTest" type="submit" class="btn btn-outline-success">Сохранить</button>
+        </div>
+        </>
+    </div>
+    @section Scripts {
+        <script type="text/javascript">
+
+            $(document).ready(function() {
+                $("#addCaseTest").click(function() {
+                    var $div = $('div[id^="testNumber"]:last');
+
+                    var num = parseInt($div.prop("id").match(/\d+/g), 10) + 1;
+
+                    var $klon = $div.clone().prop('id', 'testNumber' + num);
+                    $klon.children("#qiText").text("Вопрос №" + num);
+
+                    $klon.children("#response" + 2).val("");
+                    $klon.children("#response" + 3).val("");
+                    $klon.children("#response" + 4).val("");
+                    $klon.children("#comment").val("");
+
+                    $klon.appendTo("#test")
+                });
+
+                $('#endTest').on('click', function() {
+
+                    //count Questions
+                    var questionArr = $('div[id^="testNumber"]');
+
+                    console.log(questionArr);
+
+                    var testJson = {
+                        Title: $('#testName').val(),
+                        Description: $('#testDescription').val(),
+                        Questions: []
+                    }
+
+                    var resultQuiz = [], countQuestion = questionArr.length, question = {}, j = 1;
+
+                    for (var i = 0; i < countQuestion; i++) {
+                        question = {
+                            QuestionText: questionArr[i].children.namedItem('question' ).value,
+                            Comment: questionArr[i].children.namedItem('comment').value,
+                            AnswerQ: questionArr[i].children.namedItem('response' + 1).value,
+                            Answers: []
+                        };
+                        for (var elemI = 1; elemI < 5; elemI++) {
+                            answer = {
+                                text: questionArr[i].children.namedItem('response' + elemI).value,
+                            },
+                            question.Answers.push(answer);
+                        }
+
+                        testJson.Questions.push(question);
+                    }
+
+                    console.log(testJson);
+
+                    $.ajax({
+                        type: 'POST',
+                        url: 'api/Values/question',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: JSON.stringify(testJson),
+
+                        success: function(response) {
+                            console.log(testJson);
+                            console.log(response)
+
+                        },
+                        error: function(response) {
+
+                        }
+                    });
+
+                    console.log(resultQuiz);
+
+                });
+            });
+
+
+        </script>
+    }
