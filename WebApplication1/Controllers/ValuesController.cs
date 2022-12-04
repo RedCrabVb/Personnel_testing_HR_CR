@@ -41,6 +41,7 @@ namespace Personnel_testing_HR_CR.Controllers
             var result = new ResultTest();
             result.Fullname = resultUserDTO.Fullname;
             result.IdTest = resultUserDTO.IdTest;
+            result.Date = DateTime.Now.ToLongDateString();
             var test = _ctx.Tests.Where(x => x.Id == resultUserDTO.IdTest).Include(x => x.Questions).First();
             var questionsId = _ctx.Tests.Where(x => x.Id == resultUserDTO.IdTest).Include(x => x.Questions).First();
             var questions = _ctx.Questions.Where(q => questionsId.Questions.Contains(q)).Select(q => new Question
@@ -55,14 +56,16 @@ namespace Personnel_testing_HR_CR.Controllers
                 }).ToList()
 
             }).ToList();
-            
+
+            result.Title = test.Title;
             test.Questions = questions;
             result.QuestionsResult = new List<QuestionResult>();
 
             foreach (var q in questions)
             {
                 var nqr = new QuestionResult();
-                nqr.AnswerQ = q.AnswerQ;
+                nqr.AnswerQ = resultUserDTO.QuestionsResult.Find(x => x.QuestionID == q.QuestionID).AnswerQ;
+                nqr.AnswerUser = q.AnswerQ;
                 nqr.QuestionText = q.QuestionText;
                 nqr.Comment = q.Comment != null ? q.Comment : "";
                 nqr.Answers = new List<AnswerResult>();
@@ -75,32 +78,21 @@ namespace Personnel_testing_HR_CR.Controllers
                 }
                 result.QuestionsResult.Add(nqr);
             }
-            
-            //foreach (var q in resultUserDTO.QuestionsResult)
-            //{
-            //    Predicate<Question> match = rq => rq.QuestionID == q.QuestionID;
-            //    var qResult = result.QuestionsResult.Find(match);
-            //    qResult.AnswerQ = q.AnswerQ;
-            //    qResult.QuestionID = 0;
-            //}
 
-            
-            _ctx.ResultTests.Add(result);
             _ctx.SaveChanges();
 
             return result;
         }
 
-        [HttpPost("testAdd")]///app/Values/testAdd
+        [HttpPost("testAdd")]
         [ActionName("testAdd")]
-        public async Task<ActionResult<string>> TestAdd(Data.Entity.TestEntity testEntityDict)
+        public TestEntity TestAdd(Data.Entity.TestEntity testEntityDict)
         {
-            //var dict = DeserializeForm(input);
             Console.WriteLine(testEntityDict);
-            _ctx.Tests.Add(testEntityDict);
+            var result = _ctx.Tests.Add(testEntityDict).Entity;
             _ctx.SaveChanges();
 
-            return testEntityDict.ToString();
+            return result;
         }
 
         [HttpGet("currentTest")]

@@ -1,59 +1,62 @@
 ﻿@page
 @model PassingTestsModel
 @{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Тесты";
 }
 @{
     int count = 1, countR = 0;
+    bool isEnd = false;
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
-<form id="form1" method="post">
-    <h1>Тест: @Model.testEntity.Title</h1>
-    <h2>Описание: @Model.testEntity.Description</h2>
-    <p>Введите свое полное ФИО</p>
-    <input type="text" id="fullname"/>
-    <div class="Quiz">
+@if (isEnd == false) {
+    <form id="form1" method="post">
+        <h1>Тест: @Model.testEntity.Title</h1>
+        <h2>Описание: @Model.testEntity.Description</h2>
+        <p>Введите свое полное ФИО</p>
+        <input type="text" id="fullname"/>
+        <div class="Quiz">
 
-        <h4 style="margin-top: 4%;"> <span class="label label-info">Questions :</span> </h4>
+            <h4 style="margin-top: 4%;"> <span class="label label-info">Questions :</span> </h4>
 
 
-        @foreach (var question in @Model.testEntity.Questions)
-        {
-            <div class="BlockQ" style="border: 1px solid #bdbdbd; width: 75%; border-radius: 4px; margin-top: 40px; background-color: #f0ffff; padding: 8px;">
+            @foreach (var question in @Model.testEntity.Questions)
+            {
+                <div class="BlockQ" style="border: 1px solid #bdbdbd; width: 75%; border-radius: 4px; margin-top: 40px; background-color: #f0ffff; padding: 8px;">
 
-                <div class="Question" style="padding: 2%;">
-                    <span class="label label-warning"> @string.Format("{0}{1}.", "Q", count)</span>
-                    <span id="@string.Format("{0}{1}", "ID_Q", count)" style="display:none;">@question.QuestionID</span>
-                    <p style="display: inline; padding: 2%;" id="@string.Format("{0}{1}", "Q", count)">@question.QuestionText</p>
-                </div>
+                    <div class="Question" style="padding: 2%;">
+                        <span class="label label-warning"> @string.Format("{0}{1}.", "Q", count)</span>
+                        <span id="@string.Format("{0}{1}", "ID_Q", count)" style="display:none;">@question.QuestionID</span>
+                        <p style="display: inline; padding: 2%;" id="@string.Format("{0}{1}", "Q", count)">@question.QuestionText</p>
+                    </div>
 
-                <div class="Choices" style="margin-left: 8%;">
+                    <div class="Choices" style="margin-left: 8%;">
 
-                    @foreach (var choice in @question.Answers)
-                    {
-                        <label class="radio-inline">
-                            <input type="radio" name="@string.Format("{0}{1}", "inlineRadioOptions",count)" id="@string.Format("{0}{1}", "inlineRadio", countR)" value="@choice.Title" style="margin-left: -16px;"> @choice.Title
-                        </label>
+                        @foreach (var choice in @question.Answers)
+                        {
+                            <label class="radio-inline">
+                                <input type="radio" name="@string.Format("{0}{1}", "inlineRadioOptions",count)" id="@string.Format("{0}{1}", "inlineRadio", countR)" value="@choice.Title" style="margin-left: -16px;"> @choice.Title
+                            </label>
 
-                        <br />
-                        countR++;
-                    }
+                            <br />
+                            countR++;
+                        }
 
-                </div> <!--END Choices-->
+                    </div> <!--END Choices-->
 
-                <div id="@string.Format("{0}{1}{2}", "Ans","Q", count)">
-                </div>
+                    <div id="@string.Format("{0}{1}{2}", "Ans","Q", count)">
+                    </div>
 
-            </div> <!-- END BlockQ -->
-            count++;
-        }
-        <span id="countQuections" style="display:none;">@count</span>
-        <button type="button" id="SubmitQuiz" class="btn btn-primary" style="margin-top: 10px;"><span class="glyphicon glyphicon-ok"></span>   Submit Quiz </button>
-      </div>
-        @Model.Name
-</form>
+                </div> <!-- END BlockQ -->
+                count++;
+            }
+            <span id="countQuections" style="display:none;">@count</span>
+            <button type="button" id="SubmitQuiz" class="btn btn-primary" style="margin-top: 10px;"><span class="glyphicon glyphicon-ok"></span>Отправить</button>
+          </div>
+            @Model.Name
+    </form>
+} else {
+    <div>Спасибо за прохождение теста!</div>
+}
 @section Scripts {
 <script type="text/javascript">
 
@@ -93,6 +96,8 @@
                 success: function(response) {
                     console.log(resultQuiz);
                     console.log(response)
+                    isEnd = true;
+
 
                 },
                 error: function(response) {

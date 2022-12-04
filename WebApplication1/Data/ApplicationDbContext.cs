@@ -16,5 +16,6 @@ namespace Personnel_testing_HR_CR.Data
         public DbSet<Answer> Answers { get; set; }
         public DbSet<ResultTest> ResultTests { get; set; }
         public DbSet<QuestionResult> QuestionResults { get; set; }
+        public DbSet<AnswerResult> AnswerResults { get; set; }
     }
 }

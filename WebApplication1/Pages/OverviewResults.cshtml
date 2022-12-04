@@ -1,0 +1,53 @@
+﻿@page
+@model Personnel_testing_HR_CR.Pages.OverviewResultsModel
+@{
+}
+
+<div>
+    @if (@Model.currentTest != null)
+    {
+        <p>fd</p>
+        @Model.currentTest.QuestionsResult[0].AnswerQ
+        ;
+
+        @foreach (var question in @Model.currentTest.QuestionsResult)
+        {
+            <div class="BlockQ"
+         style="border: 1px solid #bdbdbd; width: 75%; border-radius: 4px; margin-top: 40px; background-color: #f0ffff; padding: 8px;">
+                <p>Вопрос: @question.QuestionText</p>
+                @foreach (var answer in @question.Answers)
+                {
+                    @if (answer.Title == @question.AnswerQ)
+                    {
+                        <div style="color: green">@answer.Title</div>
+                    }
+                    else if (answer.Title != @question.AnswerQ && answer.Title == @question.AnswerUser)
+                    {
+                        <div style="color: red">@answer.Title</div>
+                    }
+                    else
+                    {
+                        <div style="color: gray">@answer.Title</div>
+                    }
+
+                }
+            </div>
+        }
+    }
+    else
+    {
+        @foreach (var test in @Model.resultTests)
+        {
+            <div class="BlockQ"
+         style="border: 1px solid #bdbdbd; width: 75%; border-radius: 4px; margin-top: 40px; background-color: #f0ffff; padding: 8px;">
+                <form method="post">
+                    <input hidden="hidden" name="id" value="@test.Id" />
+                    <p>
+                        @test.Fullname, название: @test.Title, дата: @test.Date
+                    </p>
+                    <input type="submit" value="Загрузить" class="btn btn-primary" asp-page-handler="Submit" />Загрузить
+                </form>
+            </div>
+        }
+    }
+</div>

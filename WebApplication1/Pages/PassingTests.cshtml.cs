@@ -21,12 +21,11 @@ namespace Personnel_testing_HR_CR.Pages
 
         public void OnGet(int id)
         {
-            id = 6;
             var test = _ctx.Tests.Where(x => x.Id == id).Include(x => x.Questions).First();
 
             var questionsId = _ctx.Tests.Where(x => x.Id == id).Include(x => x.Questions).First();
 
-           var questions = _ctx.Questions.Where(q => questionsId.Questions.Contains(q)).Select(q => new Question
+            var questions = _ctx.Questions.Where(q => questionsId.Questions.Contains(q)).Select(q => new Question
             {
                 QuestionID = q.QuestionID,
                 QuestionText = q.QuestionText,

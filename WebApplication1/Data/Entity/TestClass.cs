@@ -25,6 +25,7 @@
         public string? Comment { get; set; }
         public List<AnswerResult> Answers { get; set; }
         public string AnswerQ { get; set; }
+        public string AnswerUser { get; set; }
     }
 
 
@@ -46,6 +47,8 @@
         public int Id { get; set; }
         public string Fullname { get; set; }
         public int IdTest { get; set; }
+        public string Title { get; set; }
+        public string Date { get; set; }
         public List<QuestionResult> QuestionsResult { get; set; }
     }
 }

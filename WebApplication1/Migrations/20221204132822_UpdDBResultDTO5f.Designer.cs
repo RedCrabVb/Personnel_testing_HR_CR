@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Personnel_testing_HR_CR.Data;
@@ -11,9 +12,11 @@ using Personnel_testing_HR_CR.Data;
 namespace PersonneltestingHRCR.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221204132822_UpdDBResultDTO5f")]
+    partial class UpdDBResultDTO5f
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -308,10 +311,6 @@ namespace PersonneltestingHRCR.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("AnswerUser")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Comment")
                         .HasColumnType("text");
 
@@ -337,20 +336,12 @@ namespace PersonneltestingHRCR.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Date")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Fullname")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("IdTest")
                         .HasColumnType("integer");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

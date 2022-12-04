@@ -36,6 +36,8 @@
         <div class="col text-center">
             <button id="endTest" type="submit" class="btn btn-outline-success">Сохранить</button>
         </div>
+        <div id="result" class="container-sm p-3 mb-2 gradient-main text-dark">
+        </div>
         </>
     </div>
     @section Scripts {
@@ -100,12 +102,13 @@
                         data: JSON.stringify(testJson),
 
                         success: function(response) {
-                            console.log(testJson);
-                            console.log(response)
-
+                            console.log(response);
+                            console.log(response.Id);
+                            var a = $('<a>').attr('href', '/PassingTests?id=' + response.id).html('Ссылка на тест');
+                            $('#result').append(a);
                         },
                         error: function(response) {
-
+                            alert("Error! " + response);
                         }
                     });
 
