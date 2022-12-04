@@ -233,6 +233,25 @@ namespace PersonneltestingHRCR.Migrations
                     b.Property<int?>("QuestionID")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionID");
+
+                    b.ToTable("Answers");
+                });
+
+            modelBuilder.Entity("Personnel_testing_HR_CR.Data.Entity.AnswerResult", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
                     b.Property<int?>("QuestionResultID")
                         .HasColumnType("integer");
 
@@ -242,11 +261,9 @@ namespace PersonneltestingHRCR.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("QuestionID");
-
                     b.HasIndex("QuestionResultID");
 
-                    b.ToTable("Answers");
+                    b.ToTable("AnswerResult");
                 });
 
             modelBuilder.Entity("Personnel_testing_HR_CR.Data.Entity.Question", b =>
@@ -292,7 +309,6 @@ namespace PersonneltestingHRCR.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Comment")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("QuestionText")
@@ -406,7 +422,10 @@ namespace PersonneltestingHRCR.Migrations
                     b.HasOne("Personnel_testing_HR_CR.Data.Entity.Question", null)
                         .WithMany("Answers")
                         .HasForeignKey("QuestionID");
+                });
 
+            modelBuilder.Entity("Personnel_testing_HR_CR.Data.Entity.AnswerResult", b =>
+                {
                     b.HasOne("Personnel_testing_HR_CR.Data.Entity.QuestionResult", null)
                         .WithMany("Answers")
                         .HasForeignKey("QuestionResultID");

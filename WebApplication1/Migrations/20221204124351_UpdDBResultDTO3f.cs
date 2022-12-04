@@ -5,7 +5,7 @@
 namespace PersonneltestingHRCR.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdDBResultDTO2f : Migration
+    public partial class UpdDBResultDTO3f : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

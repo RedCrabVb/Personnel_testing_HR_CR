@@ -12,8 +12,8 @@ using Personnel_testing_HR_CR.Data;
 namespace PersonneltestingHRCR.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221204123759_UpdDBResultDTO2f")]
-    partial class UpdDBResultDTO2f
+    [Migration("20221204124351_UpdDBResultDTO3f")]
+    partial class UpdDBResultDTO3f
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -309,7 +309,7 @@ namespace PersonneltestingHRCR.Migrations
 
                     b.HasIndex("ResultTestId");
 
-                    b.ToTable("QuestionResult");
+                    b.ToTable("QuestionResults");
                 });
 
             modelBuilder.Entity("Personnel_testing_HR_CR.Data.Entity.ResultTest", b =>

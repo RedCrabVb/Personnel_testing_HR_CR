@@ -37,9 +37,10 @@ namespace Personnel_testing_HR_CR.Controllers
         [HttpPost("question")]
         public ResultTest UpdateQuestion(ResultUserDTO resultUserDTO)
         {
+
             var result = new ResultTest();
             result.Fullname = resultUserDTO.Fullname;
-            result.Id = resultUserDTO.IdTest;
+            result.IdTest = resultUserDTO.IdTest;
             var test = _ctx.Tests.Where(x => x.Id == resultUserDTO.IdTest).Include(x => x.Questions).First();
             var questionsId = _ctx.Tests.Where(x => x.Id == resultUserDTO.IdTest).Include(x => x.Questions).First();
             var questions = _ctx.Questions.Where(q => questionsId.Questions.Contains(q)).Select(q => new Question
@@ -63,8 +64,15 @@ namespace Personnel_testing_HR_CR.Controllers
                 var nqr = new QuestionResult();
                 nqr.AnswerQ = q.AnswerQ;
                 nqr.QuestionText = q.QuestionText;
-                nqr.Comment = q.Comment;
-                nqr.Answers = q.Answers;
+                nqr.Comment = q.Comment != null ? q.Comment : "";
+                nqr.Answers = new List<AnswerResult>();
+
+                foreach (var qa in q.Answers)
+                {
+                    var qar = new AnswerResult();
+                    qar.Title = qa.Title;
+                    nqr.Answers.Add(qar);
+                }
                 result.QuestionsResult.Add(nqr);
             }
             
@@ -76,6 +84,7 @@ namespace Personnel_testing_HR_CR.Controllers
             //    qResult.QuestionID = 0;
             //}
 
+            
             _ctx.ResultTests.Add(result);
             _ctx.SaveChanges();
 

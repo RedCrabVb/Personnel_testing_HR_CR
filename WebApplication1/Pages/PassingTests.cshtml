@@ -67,7 +67,7 @@
             console.log(sel);
 
             var resultQuiz = {
-                    Fullname: $('#fullname').text(),
+                    Fullname: $('#fullname').val(),
                     IdTest: @Model.testEntity.Id,
                     QuestionsResult: []
             }, countQuestion = parseInt(sel), question = {}, j = 1;
