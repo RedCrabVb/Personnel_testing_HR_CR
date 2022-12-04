@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Personnel_testing_HR_CR.Data.Entity;
 
 namespace Personnel_testing_HR_CR.Data
 {
@@ -9,5 +10,9 @@ namespace Personnel_testing_HR_CR.Data
             : base(options)
         {
         }
+
+        public DbSet<TestEntity> Tests { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<Answer> Answers { get; set; }
     }
 }

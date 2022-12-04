@@ -82,7 +82,7 @@
                         };
                         for (var elemI = 1; elemI < 5; elemI++) {
                             answer = {
-                                text: questionArr[i].children.namedItem('response' + elemI).value,
+                                Title: questionArr[i].children.namedItem('response' + elemI).value,
                             },
                             question.Answers.push(answer);
                         }
@@ -94,7 +94,7 @@
 
                     $.ajax({
                         type: 'POST',
-                        url: 'api/Values/question',
+                        url: 'api/Values/testAdd',
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: JSON.stringify(testJson),

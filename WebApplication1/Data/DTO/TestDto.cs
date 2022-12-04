@@ -1,7 +1,7 @@
 ﻿namespace Personnel_testing_HR_CR.Data.DTO
 {
 
-    public class Question
+    public class QuestionDTO
     {
         public int QuestionID { get; set; }
         public string QuestionText { get; set; }
