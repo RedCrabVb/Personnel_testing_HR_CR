@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Personnel_testing_HR_CR.Data;
@@ -11,9 +12,11 @@ using Personnel_testing_HR_CR.Data;
 namespace PersonneltestingHRCR.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221204122858_UpdDBResultDTO")]
+    partial class UpdDBResultDTO
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -233,9 +236,6 @@ namespace PersonneltestingHRCR.Migrations
                     b.Property<int?>("QuestionID")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("QuestionResultID")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
@@ -243,8 +243,6 @@ namespace PersonneltestingHRCR.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("QuestionID");
-
-                    b.HasIndex("QuestionResultID");
 
                     b.ToTable("Answers");
                 });
@@ -269,44 +267,19 @@ namespace PersonneltestingHRCR.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int?>("ResultTestId")
+                        .HasColumnType("integer");
+
                     b.Property<int?>("TestEntityId")
                         .HasColumnType("integer");
 
                     b.HasKey("QuestionID");
 
+                    b.HasIndex("ResultTestId");
+
                     b.HasIndex("TestEntityId");
 
                     b.ToTable("Questions");
-                });
-
-            modelBuilder.Entity("Personnel_testing_HR_CR.Data.Entity.QuestionResult", b =>
-                {
-                    b.Property<int>("QuestionResultID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("QuestionResultID"));
-
-                    b.Property<string>("AnswerQ")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("QuestionText")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int?>("ResultTestId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("QuestionResultID");
-
-                    b.HasIndex("ResultTestId");
-
-                    b.ToTable("QuestionResults");
                 });
 
             modelBuilder.Entity("Personnel_testing_HR_CR.Data.Entity.ResultTest", b =>
@@ -406,32 +379,20 @@ namespace PersonneltestingHRCR.Migrations
                     b.HasOne("Personnel_testing_HR_CR.Data.Entity.Question", null)
                         .WithMany("Answers")
                         .HasForeignKey("QuestionID");
-
-                    b.HasOne("Personnel_testing_HR_CR.Data.Entity.QuestionResult", null)
-                        .WithMany("Answers")
-                        .HasForeignKey("QuestionResultID");
                 });
 
             modelBuilder.Entity("Personnel_testing_HR_CR.Data.Entity.Question", b =>
                 {
+                    b.HasOne("Personnel_testing_HR_CR.Data.Entity.ResultTest", null)
+                        .WithMany("QuestionsResult")
+                        .HasForeignKey("ResultTestId");
+
                     b.HasOne("Personnel_testing_HR_CR.Data.Entity.TestEntity", null)
                         .WithMany("Questions")
                         .HasForeignKey("TestEntityId");
                 });
 
-            modelBuilder.Entity("Personnel_testing_HR_CR.Data.Entity.QuestionResult", b =>
-                {
-                    b.HasOne("Personnel_testing_HR_CR.Data.Entity.ResultTest", null)
-                        .WithMany("QuestionsResult")
-                        .HasForeignKey("ResultTestId");
-                });
-
             modelBuilder.Entity("Personnel_testing_HR_CR.Data.Entity.Question", b =>
-                {
-                    b.Navigation("Answers");
-                });
-
-            modelBuilder.Entity("Personnel_testing_HR_CR.Data.Entity.QuestionResult", b =>
                 {
                     b.Navigation("Answers");
                 });

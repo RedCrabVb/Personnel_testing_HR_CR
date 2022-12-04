@@ -14,11 +14,11 @@ namespace Personnel_testing_HR_CR.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _ctx;
 
         public ValuesController(ApplicationDbContext context)
         {
-            _context = context;
+            _ctx = context;
         }
 
         static Dictionary<string, StringValues> DeserializeForm(string content)
@@ -35,9 +35,51 @@ namespace Personnel_testing_HR_CR.Controllers
         }
 
         [HttpPost("question")]
-        public async Task<ActionResult<string>> UpdateQuestion(QuestionDTO[] question)
+        public ResultTest UpdateQuestion(ResultUserDTO resultUserDTO)
         {
-            return new ObjectResult(question[0].AnswerQ);
+            var result = new ResultTest();
+            result.Fullname = resultUserDTO.Fullname;
+            result.Id = resultUserDTO.IdTest;
+            var test = _ctx.Tests.Where(x => x.Id == resultUserDTO.IdTest).Include(x => x.Questions).First();
+            var questionsId = _ctx.Tests.Where(x => x.Id == resultUserDTO.IdTest).Include(x => x.Questions).First();
+            var questions = _ctx.Questions.Where(q => questionsId.Questions.Contains(q)).Select(q => new Question
+            {
+                QuestionID = q.QuestionID,
+                QuestionText = q.QuestionText,
+                AnswerQ = q.AnswerQ,
+                Answers = q.Answers.Select(c => new Answer
+                {
+                    Id = c.Id,
+                    Title = c.Title
+                }).ToList()
+
+            }).ToList();
+            
+            test.Questions = questions;
+            result.QuestionsResult = new List<QuestionResult>();
+
+            foreach (var q in questions)
+            {
+                var nqr = new QuestionResult();
+                nqr.AnswerQ = q.AnswerQ;
+                nqr.QuestionText = q.QuestionText;
+                nqr.Comment = q.Comment;
+                nqr.Answers = q.Answers;
+                result.QuestionsResult.Add(nqr);
+            }
+            
+            //foreach (var q in resultUserDTO.QuestionsResult)
+            //{
+            //    Predicate<Question> match = rq => rq.QuestionID == q.QuestionID;
+            //    var qResult = result.QuestionsResult.Find(match);
+            //    qResult.AnswerQ = q.AnswerQ;
+            //    qResult.QuestionID = 0;
+            //}
+
+            _ctx.ResultTests.Add(result);
+            _ctx.SaveChanges();
+
+            return result;
         }
 
         [HttpPost("testAdd")]///app/Values/testAdd
@@ -46,8 +88,8 @@ namespace Personnel_testing_HR_CR.Controllers
         {
             //var dict = DeserializeForm(input);
             Console.WriteLine(testEntityDict);
-            _context.Tests.Add(testEntityDict);
-            _context.SaveChanges();
+            _ctx.Tests.Add(testEntityDict);
+            _ctx.SaveChanges();
 
             return testEntityDict.ToString();
         }
@@ -56,7 +98,7 @@ namespace Personnel_testing_HR_CR.Controllers
         public TestEntity GetTest(int id)
         {
 
-            var test = _context.Tests.Where(x => x.Id == id).Include(x => x.Questions).First();
+            var test = _ctx.Tests.Where(x => x.Id == id).Include(x => x.Questions).First();
 
             return test;
 
@@ -66,7 +108,7 @@ namespace Personnel_testing_HR_CR.Controllers
         public List<TestEntity> GetTests()
         {
 
-            var tests = _context.Tests.ToList();
+            var tests = _ctx.Tests.ToList();
 
             return tests;
         }
@@ -75,9 +117,9 @@ namespace Personnel_testing_HR_CR.Controllers
         public List<Question> GetQuestions(int id)
         {
 
-            var questionsId = _context.Tests.Where(x => x.Id == id).Include(x => x.Questions).First();
+            var questionsId = _ctx.Tests.Where(x => x.Id == id).Include(x => x.Questions).First();
 
-            return _context.Questions.Where(q => questionsId.Questions.Contains(q)).Select(q => new Question
+            return _ctx.Questions.Where(q => questionsId.Questions.Contains(q)).Select(q => new Question
             {
                 QuestionID = q.QuestionID,
                 QuestionText = q.QuestionText,

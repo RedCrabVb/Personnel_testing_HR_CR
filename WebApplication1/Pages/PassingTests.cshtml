@@ -10,7 +10,10 @@
 
 <p>Use this page to detail your site's privacy policy.</p>
 <form id="form1" method="post">
-    <h1>Example test</h1>
+    <h1>Тест: @Model.testEntity.Title</h1>
+    <h2>Описание: @Model.testEntity.Description</h2>
+    <p>Введите свое полное ФИО</p>
+    <input type="text" id="fullname"/>
     <div class="Quiz">
 
         <h4 style="margin-top: 4%;"> <span class="label label-info">Questions :</span> </h4>
@@ -63,7 +66,11 @@
 
             console.log(sel);
 
-            var resultQuiz = [], countQuestion = parseInt(sel), question = {}, j = 1;
+            var resultQuiz = {
+                    Fullname: $('#fullname').text(),
+                    IdTest: @Model.testEntity.Id,
+                    QuestionsResult: []
+            }, countQuestion = parseInt(sel), question = {}, j = 1;
 
             for (var i = 1; i < countQuestion; i++) {
                 question = {
@@ -72,7 +79,7 @@
                     answerQ: $('input[name=inlineRadioOptions' + i + ']:checked').val()
                 }
 
-                resultQuiz.push(question);
+                resultQuiz.QuestionsResult.push(question);
             }
 
             $.ajax({
