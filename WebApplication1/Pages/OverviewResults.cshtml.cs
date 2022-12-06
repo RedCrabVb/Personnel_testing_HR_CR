@@ -33,6 +33,7 @@ namespace Personnel_testing_HR_CR.Pages
                     QuestionResultID = q.QuestionResultID,
                     QuestionText = q.QuestionText,
                     AnswerQ = q.AnswerQ,
+                    AnswerUser = q.AnswerUser,
                     Answers = q.Answers.Select(c => new AnswerResult
                     {
                         Id = c.Id,

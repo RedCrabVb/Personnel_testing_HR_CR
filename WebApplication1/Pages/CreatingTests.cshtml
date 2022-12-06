@@ -18,9 +18,9 @@
             <div id="testNumber1" class="container p-1 mb-1 gradient-test text-white ">
                 <h1 id="qiText" class="text-dark">Вопрос №1</h1>
                 <h6 class="text-dark">Название вопроса</h6>
-                <input id="question" name="nameQ_1" class="form-control mb-2" required="required" type="text">
+                <input id="question" class="form-control mb-2" required="required" type="text">
                 <h6 class="text-dark">Варианты ответа</h6>
-                <p>Верный: </p><input id="response1" name="nameR_1" class="form-control mb-2" required="required" type="text">
+                <input id="response1" class="form-control mb-2" required="required" style="background: #9ffb9f" type="text">
                 <input id="response2" class="form-control mb-2" required="required" type="text">
                 <input id="response3" class="form-control mb-2" required="required" type="text">
                 <input id="response4" class="form-control mb-2" required="required" type="text">
@@ -52,6 +52,9 @@
                     var $klon = $div.clone().prop('id', 'testNumber' + num);
                     $klon.children("#qiText").text("Вопрос №" + num);
 
+                    $klon.children("#question").val("");
+
+                    $klon.children("#response" + 1).val("");
                     $klon.children("#response" + 2).val("");
                     $klon.children("#response" + 3).val("");
                     $klon.children("#response" + 4).val("");

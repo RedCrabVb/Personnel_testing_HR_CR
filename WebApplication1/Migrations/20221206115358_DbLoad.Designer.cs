@@ -12,8 +12,8 @@ using Personnel_testing_HR_CR.Data;
 namespace PersonneltestingHRCR.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221204100829_UpdNewTest")]
-    partial class UpdNewTest
+    [Migration("20221206115358_DbLoad")]
+    partial class DbLoad
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -244,7 +244,29 @@ namespace PersonneltestingHRCR.Migrations
 
                     b.HasIndex("QuestionID");
 
-                    b.ToTable("Answer");
+                    b.ToTable("Answers");
+                });
+
+            modelBuilder.Entity("Personnel_testing_HR_CR.Data.Entity.AnswerResult", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("QuestionResultID")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionResultID");
+
+                    b.ToTable("AnswerResults");
                 });
 
             modelBuilder.Entity("Personnel_testing_HR_CR.Data.Entity.Question", b =>
@@ -274,7 +296,68 @@ namespace PersonneltestingHRCR.Migrations
 
                     b.HasIndex("TestEntityId");
 
-                    b.ToTable("Question");
+                    b.ToTable("Questions");
+                });
+
+            modelBuilder.Entity("Personnel_testing_HR_CR.Data.Entity.QuestionResult", b =>
+                {
+                    b.Property<int>("QuestionResultID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("QuestionResultID"));
+
+                    b.Property<string>("AnswerQ")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("AnswerUser")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("text");
+
+                    b.Property<string>("QuestionText")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("ResultTestId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("QuestionResultID");
+
+                    b.HasIndex("ResultTestId");
+
+                    b.ToTable("QuestionResults");
+                });
+
+            modelBuilder.Entity("Personnel_testing_HR_CR.Data.Entity.ResultTest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Date")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Fullname")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("IdTest")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ResultTests");
                 });
 
             modelBuilder.Entity("Personnel_testing_HR_CR.Data.Entity.TestEntity", b =>
@@ -356,6 +439,13 @@ namespace PersonneltestingHRCR.Migrations
                         .HasForeignKey("QuestionID");
                 });
 
+            modelBuilder.Entity("Personnel_testing_HR_CR.Data.Entity.AnswerResult", b =>
+                {
+                    b.HasOne("Personnel_testing_HR_CR.Data.Entity.QuestionResult", null)
+                        .WithMany("Answers")
+                        .HasForeignKey("QuestionResultID");
+                });
+
             modelBuilder.Entity("Personnel_testing_HR_CR.Data.Entity.Question", b =>
                 {
                     b.HasOne("Personnel_testing_HR_CR.Data.Entity.TestEntity", null)
@@ -363,9 +453,26 @@ namespace PersonneltestingHRCR.Migrations
                         .HasForeignKey("TestEntityId");
                 });
 
+            modelBuilder.Entity("Personnel_testing_HR_CR.Data.Entity.QuestionResult", b =>
+                {
+                    b.HasOne("Personnel_testing_HR_CR.Data.Entity.ResultTest", null)
+                        .WithMany("QuestionsResult")
+                        .HasForeignKey("ResultTestId");
+                });
+
             modelBuilder.Entity("Personnel_testing_HR_CR.Data.Entity.Question", b =>
                 {
                     b.Navigation("Answers");
+                });
+
+            modelBuilder.Entity("Personnel_testing_HR_CR.Data.Entity.QuestionResult", b =>
+                {
+                    b.Navigation("Answers");
+                });
+
+            modelBuilder.Entity("Personnel_testing_HR_CR.Data.Entity.ResultTest", b =>
+                {
+                    b.Navigation("QuestionsResult");
                 });
 
             modelBuilder.Entity("Personnel_testing_HR_CR.Data.Entity.TestEntity", b =>

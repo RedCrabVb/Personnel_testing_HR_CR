@@ -64,8 +64,8 @@ namespace Personnel_testing_HR_CR.Controllers
             foreach (var q in questions)
             {
                 var nqr = new QuestionResult();
-                nqr.AnswerQ = resultUserDTO.QuestionsResult.Find(x => x.QuestionID == q.QuestionID).AnswerQ;
-                nqr.AnswerUser = q.AnswerQ;
+                nqr.AnswerQ = q.AnswerQ;
+                nqr.AnswerUser = resultUserDTO.QuestionsResult.Find(x => x.QuestionID == q.QuestionID).AnswerQ;
                 nqr.QuestionText = q.QuestionText;
                 nqr.Comment = q.Comment != null ? q.Comment : "";
                 nqr.Answers = new List<AnswerResult>();
@@ -79,6 +79,7 @@ namespace Personnel_testing_HR_CR.Controllers
                 result.QuestionsResult.Add(nqr);
             }
 
+            _ctx.Add(result);
             _ctx.SaveChanges();
 
             return result;

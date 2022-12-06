@@ -4,10 +4,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Personnel_testing_HR_CR.Migrations
+namespace PersonneltestingHRCR.Migrations
 {
     /// <inheritdoc />
-    public partial class upd : Migration
+    public partial class DbLoad : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -49,6 +49,36 @@ namespace Personnel_testing_HR_CR.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ResultTests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Fullname = table.Column<string>(type: "text", nullable: false),
+                    IdTest = table.Column<int>(type: "integer", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Date = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ResultTests", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tests", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -157,6 +187,97 @@ namespace Personnel_testing_HR_CR.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "QuestionResults",
+                columns: table => new
+                {
+                    QuestionResultID = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    QuestionText = table.Column<string>(type: "text", nullable: false),
+                    Comment = table.Column<string>(type: "text", nullable: true),
+                    AnswerQ = table.Column<string>(type: "text", nullable: false),
+                    AnswerUser = table.Column<string>(type: "text", nullable: false),
+                    ResultTestId = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuestionResults", x => x.QuestionResultID);
+                    table.ForeignKey(
+                        name: "FK_QuestionResults_ResultTests_ResultTestId",
+                        column: x => x.ResultTestId,
+                        principalTable: "ResultTests",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Questions",
+                columns: table => new
+                {
+                    QuestionID = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    QuestionText = table.Column<string>(type: "text", nullable: false),
+                    Comment = table.Column<string>(type: "text", nullable: false),
+                    AnswerQ = table.Column<string>(type: "text", nullable: false),
+                    TestEntityId = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Questions", x => x.QuestionID);
+                    table.ForeignKey(
+                        name: "FK_Questions_Tests_TestEntityId",
+                        column: x => x.TestEntityId,
+                        principalTable: "Tests",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AnswerResults",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    QuestionResultID = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnswerResults", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AnswerResults_QuestionResults_QuestionResultID",
+                        column: x => x.QuestionResultID,
+                        principalTable: "QuestionResults",
+                        principalColumn: "QuestionResultID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Answers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    QuestionID = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Answers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Answers_Questions_QuestionID",
+                        column: x => x.QuestionID,
+                        principalTable: "Questions",
+                        principalColumn: "QuestionID");
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AnswerResults_QuestionResultID",
+                table: "AnswerResults",
+                column: "QuestionResultID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Answers_QuestionID",
+                table: "Answers",
+                column: "QuestionID");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -193,11 +314,27 @@ namespace Personnel_testing_HR_CR.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuestionResults_ResultTestId",
+                table: "QuestionResults",
+                column: "ResultTestId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Questions_TestEntityId",
+                table: "Questions",
+                column: "TestEntityId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AnswerResults");
+
+            migrationBuilder.DropTable(
+                name: "Answers");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -214,10 +351,22 @@ namespace Personnel_testing_HR_CR.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "QuestionResults");
+
+            migrationBuilder.DropTable(
+                name: "Questions");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "ResultTests");
+
+            migrationBuilder.DropTable(
+                name: "Tests");
         }
     }
 }

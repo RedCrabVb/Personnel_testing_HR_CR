@@ -8,7 +8,7 @@
     bool isEnd = false;
 }
 
-@if (isEnd == false) {
+@if (@isEnd == false) {
     <form id="form1" method="post">
         <h1>Тест: @Model.testEntity.Title</h1>
         <h2>Описание: @Model.testEntity.Description</h2>
@@ -96,7 +96,7 @@
                 success: function(response) {
                     console.log(resultQuiz);
                     console.log(response)
-                    isEnd = true;
+                    @isEnd = true;
 
 
                 },

@@ -6,29 +6,39 @@
 <div>
     @if (@Model.currentTest != null)
     {
-        <p>fd</p>
-        @Model.currentTest.QuestionsResult[0].AnswerQ
-        ;
+        var styleBlock = "border: 1px solid #bdbdbd; width: 75%; border-radius: 4px; margin-top: 40px; background-color: @collorBack; padding: 8px;";
+        <div style="@styleBlock.Replace("@collorBack", "#d6d6ff")">
+            <p>ФИО @Model.currentTest.Fullname</p>
+            <p>Тест @Model.currentTest.Title</p>
+        </div>
 
         @foreach (var question in @Model.currentTest.QuestionsResult)
         {
             <div class="BlockQ"
-         style="border: 1px solid #bdbdbd; width: 75%; border-radius: 4px; margin-top: 40px; background-color: #f0ffff; padding: 8px;">
+         style="@styleBlock.Replace("@collorBack", "#dedede")">
                 <p>Вопрос: @question.QuestionText</p>
+@*                <p>question.AnswerQ @question.AnswerQ</p>;
+                <p>question.AnswerUser @question.AnswerUser</p>;*@
+                @*<p>--------------------------</p>*@
                 @foreach (var answer in @question.Answers)
                 {
-                    @if (answer.Title == @question.AnswerQ)
+@*                    <p>answer.Title: @answer.Title</p> 
+                    <p>--</p>*@
+                    var collor = "color: gray";
+                    @if (@answer.Title == @question.AnswerQ)
                     {
-                        <div style="color: green">@answer.Title</div>
+                        collor = "color: gold";
                     }
-                    else if (answer.Title != @question.AnswerQ && answer.Title == @question.AnswerUser)
+
+                    @if(answer.Title == @question.AnswerUser && @answer.Title == @question.AnswerQ) {
+                        collor = "color: green";
+                    }
+                    else if (answer.Title == @question.AnswerUser && @answer.Title != @question.AnswerQ)
                     {
-                        <div style="color: red">@answer.Title</div>
+                        collor = "color: red";
                     }
-                    else
-                    {
-                        <div style="color: gray">@answer.Title</div>
-                    }
+
+                    <div style="@collor">@answer.Title</div>
 
                 }
             </div>
@@ -45,7 +55,7 @@
                     <p>
                         @test.Fullname, название: @test.Title, дата: @test.Date
                     </p>
-                    <input type="submit" value="Загрузить" class="btn btn-primary" asp-page-handler="Submit" />Загрузить
+                    <input type="submit" value="Загрузить" class="btn btn-primary" asp-page-handler="Submit" />
                 </form>
             </div>
         }

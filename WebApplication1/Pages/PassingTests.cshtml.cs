@@ -44,14 +44,5 @@ namespace Personnel_testing_HR_CR.Pages
         }
 
 
-        //[HttpPost]
-        //[Route("Privacy/submit")]
-        //public string OnPostSubmit(TestEntity testEntityAnswer)
-        //{
-        //    this.Name = testEntityAnswer.ToString();
-        //    return this.Name;
-        //}
-
-
     }
 }
