@@ -5,18 +5,18 @@
 }
 @{
     int count = 1, countR = 0;
-    bool isEnd = false;
 }
 
-@if (@isEnd == false) {
+@if (@Model.isEnd == false)
+{
     <form id="form1" method="post">
         <h1>Тест: @Model.testEntity.Title</h1>
         <h2>Описание: @Model.testEntity.Description</h2>
         <p>Введите свое полное ФИО</p>
-        <input type="text" id="fullname"/>
+        <input type="text" id="fullname" />
         <div class="Quiz">
 
-            <h4 style="margin-top: 4%;"> <span class="label label-info">Questions :</span> </h4>
+            <h4 style="margin-top: 4%;"> <span class="label label-info">Вопросы :</span> </h4>
 
 
             @foreach (var question in @Model.testEntity.Questions)
@@ -24,7 +24,7 @@
                 <div class="BlockQ" style="border: 1px solid #bdbdbd; width: 75%; border-radius: 4px; margin-top: 40px; background-color: #f0ffff; padding: 8px;">
 
                     <div class="Question" style="padding: 2%;">
-                        <span class="label label-warning"> @string.Format("{0}{1}.", "Q", count)</span>
+                        <span class="label label-warning"> @string.Format("{0}{1}.", "№", count)</span>
                         <span id="@string.Format("{0}{1}", "ID_Q", count)" style="display:none;">@question.QuestionID</span>
                         <p style="display: inline; padding: 2%;" id="@string.Format("{0}{1}", "Q", count)">@question.QuestionText</p>
                     </div>
@@ -50,68 +50,71 @@
                 count++;
             }
             <span id="countQuections" style="display:none;">@count</span>
-            <button type="button" id="SubmitQuiz" class="btn btn-primary" style="margin-top: 10px;"><span class="glyphicon glyphicon-ok"></span>Отправить</button>
-          </div>
-            @Model.Name
+            <div class="d-flex justify-content-center">
+                <button type="button" id="SubmitQuiz" class="btn btn-primary" style="margin-top: 10px;"><span class="glyphicon glyphicon-ok"></span>Отправить</button>
+            </div>
+        </div>
+        @Model.Name
     </form>
-} else {
-    <div>Спасибо за прохождение теста!</div>
-}
 @section Scripts {
-<script type="text/javascript">
+    <script type="text/javascript">
 
-    $(document).ready(function() {
+        $(document).ready(function() {
 
-        $('#SubmitQuiz').on('click', function() {
+            $('#SubmitQuiz').on('click', function() {
 
-            //count Questions
-            var sel = $('#countQuections').text();
+                //count Questions
+                var sel = $('#countQuections').text();
 
-            console.log(sel);
+                console.log(sel);
 
-            var resultQuiz = {
+                var resultQuiz = {
                     Fullname: $('#fullname').val(),
                     IdTest: @Model.testEntity.Id,
                     QuestionsResult: []
-            }, countQuestion = parseInt(sel), question = {}, j = 1;
+                }, countQuestion = parseInt(sel), question = {}, j = 1;
 
-            for (var i = 1; i < countQuestion; i++) {
-                question = {
-                    questionID: $('#ID_Q' + i).text(),
-                    questionText: $('#Q' + i).text(),
-                    answerQ: $('input[name=inlineRadioOptions' + i + ']:checked').val()
+                for (var i = 1; i < countQuestion; i++) {
+                    question = {
+                        questionID: $('#ID_Q' + i).text(),
+                        questionText: $('#Q' + i).text(),
+                        answerQ: $('input[name=inlineRadioOptions' + i + ']:checked').val()
+                    }
+
+                    resultQuiz.QuestionsResult.push(question);
                 }
 
-                resultQuiz.QuestionsResult.push(question);
-            }
+                $.ajax({
 
-            $.ajax({
+                    type: 'POST',
+                    url: 'api/Values/question',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: JSON.stringify(resultQuiz),
 
-                type: 'POST',
-                url: 'api/Values/question',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                data: JSON.stringify(resultQuiz),
+                    success: function(response) {
+                        console.log(resultQuiz);
+                        console.log(response);
 
-                success: function(response) {
-                    console.log(resultQuiz);
-                    console.log(response)
-                    @isEnd = true;
+                        window.location.href = "/PassingTests?id=-1"
+                    },
+                    error: function(response) {
 
+                    }
+                });
 
-                },
-                error: function(response) {
+                console.log(resultQuiz);
 
-                }
             });
 
-            console.log(resultQuiz);
+
 
         });
 
-
-
-    });
-
-</script>
+    </script>
+}
+}
+else
+{
+    <div>Спасибо за прохождение теста!</div>
 }

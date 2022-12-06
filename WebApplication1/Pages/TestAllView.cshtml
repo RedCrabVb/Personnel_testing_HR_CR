@@ -1,0 +1,44 @@
+﻿@page
+@model Personnel_testing_HR_CR.Pages.TestAllViewModel
+@{
+}
+<div>
+    @if (@Model.currentTest != null)
+    {
+        var styleBlock = "border: 1px solid #bdbdbd; width: 75%; border-radius: 4px; margin-top: 40px; background-color: @collorBack; padding: 8px;";
+        <div style="@styleBlock.Replace("@collorBack", "#d6d6ff")">
+            <p>Тест<a href="/PassingTests?id=@@Model.currentTest.Title.Id">@Model.currentTest.Title</a></p> 
+            <p>Описание @Model.currentTest.Description</p>
+        </div>
+
+        @foreach (var question in @Model.currentTest.Questions)
+        {
+            <div class="BlockQ"
+         style="@styleBlock.Replace("@collorBack", "#dedede")">
+                <p>Вопрос: @question.QuestionText</p>
+                @foreach (var answer in @question.Answers)
+                {
+                    <p>@answer.Title</p>
+                }
+            </div>
+        }
+    }
+    else
+    {
+        @foreach (var test in @Model.testEntitys)
+        {
+            <div class="BlockQ"
+         style="border: 1px solid #bdbdbd; width: 75%; border-radius: 4px; margin-top: 40px; background-color: #f0ffff; padding: 8px;">
+                <form method="post">
+                    <input hidden="hidden" name="id" value="@test.Id" />
+                    <a href="/PassingTests?id=@test.Id"> @test.Title</a>
+                    <p>
+                       @test.Description
+                    </p>
+                    <input type="submit" value="Загрузить" class="btn btn-primary" asp-page-handler="Submit" />
+                </form>
+            </div>
+        }
+    }
+</div>
+
